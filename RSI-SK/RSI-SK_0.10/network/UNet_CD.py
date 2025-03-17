@@ -41,6 +41,31 @@ class SpatialAttention(nn.Module):
         return self.sigmoid(x)
 
 
+def filter_layers(layer, layer_class):
+    # Initialize a tensor to hold the filtered results
+    filtered = torch.zeros_like(layer)
+
+
+    for c in range(layer.shape[1]):  # Loop over channels
+
+        max_val = torch.max(layer[:, c, :, :]).item()
+        min_val = torch.min(layer[:, c, :, :]).item()
+        threshold = (max_val - min_val)
+
+        max_val_class = torch.max(layer_class[:, c, :, :]).item()
+        min_val_class = torch.min(layer_class[:, c, :, :]).item()
+        threshold_class = (max_val_class - min_val_class)
+
+        mask1 = (layer[:, c, :, :] >= threshold * 0.8 + min_val) & (layer_class[:, c, :, :] >= threshold_class * 0.8 + min_val_class) #& (
+                    #torch.abs(layer[:, c, :, :] - layer_class[:, c, :, :]) < 0.2)
+        mask2 = (layer[:, c, :, :] < threshold * 0.2 + min_val) & (layer_class[:, c, :, :] < threshold_class * 0.2 + min_val_class) #& (
+                   # torch.abs(layer[:, c, :, :] - layer_class[:, c, :, :]) < 0.2)
+
+        filtered[:, c, :, :] = torch.where(mask1, layer[:, c, :, :] + layer_class[:, c, :, :], torch.zeros_like(layer[:, c, :, :]))
+        filtered[:, c, :, :] = torch.where(mask2, torch.abs(layer[:, c, :, :] - layer_class[:, c, :, :]), filtered[:, c, :, :])
+
+    return filtered
+
 
 class UpConv(nn.Module):
     def __init__(self, in_ch, out_ch):
