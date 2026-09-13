@@ -3,3 +3,5 @@ Figure 1 shows the schematic diagram of the proposed RSI-SK change detection fra
 
 The data can be accessed via the following link: data2.zip https://pan.baidu.com/s/1HMG04NPZYqe8eCMgx_qieg?pwd=1234 code: 1234
 The pth can be accessed via the following link: Unet_train1__best_student_iou.pth https://pan.baidu.com/s/18cfcEe9f3X9IF6vPPKQRxA?pwd=1234 code: 1234
+
+The MSAANet_pth can be accessed via the following link:MSAANet_pth.zip https://pan.baidu.com/s/11SxVIYOb6UG26cf4_0uI5Q?pwd=1234 code: 1234
